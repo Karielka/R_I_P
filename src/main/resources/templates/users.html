@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список пользователей</title>
+    <link rel="stylesheet" href="/static/styles.css"> <!-- Если требуется подключить стили -->
+</head>
+<body>
+<h1>Список пользователей</h1>
+
+<table>
+    <h>Таблица пользователей</h>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя пользователя</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Отображаем список пользователей -->
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">ID</td>
+        <td th:text="${user.username}">Имя пользователя</td>
+        <td th:text="${user.email}">Email</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
