@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User Profile</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mt-4">Редактирование профиля пользователя</h1>
+
+    <!-- Форма для редактирования профиля -->
+    <form th:action="@{/profiles/{id}(id=${userProfile.id})}" method="post">
+        <div class="form-group">
+            <label for="userId">User ID</label>
+            <input type="number" id="userId" name="userId" class="form-control" th:value="${userProfile.userId}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="firstName">Имя</label>
+            <input type="text" id="firstName" name="firstName" class="form-control" th:value="${userProfile.firstName}" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Фамилия</label>
+            <input type="text" id="lastName" name="lastName" class="form-control" th:value="${userProfile.lastName}" required>
+        </div>
+        <div class="form-group">
+            <label for="dateOfBirth">Дата рождения</label>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control" th:value="${userProfile.dateOfBirth}"/>
+        </div>
+        <div class="form-group">
+            <label for="gender">Пол</label>
+            <select id="gender" name="gender" class="form-control" th:value="${userProfile.gender}">
+                <option value="Male">Мужской</option>
+                <option value="Female">Женский</option>
+                <option value="Other">Другое европейское чудовище</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="bio">Биография</label>
+            <textarea id="bio" name="bio" class="form-control" th:text="${userProfile.bio}"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="location">Местонахождение</label>
+            <input type="text" id="location" name="location" class="form-control" th:value="${userProfile.location}">
+        </div>
+        <button type="submit" class="btn btn-primary">Обновить</button>
+        <a href="/profiles" class="btn btn-secondary">Отмена</a>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profiles</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+  <h1 class="mt-4">Страничка профилей пользователей</h1>
+
+  <!-- Форма для создания нового профиля -->
+  <form th:action="@{/profiles}" method="post" class="mb-4">
+    <h2>Заполнить профиль</h2>
+    <div class="form-group">
+      <label for="userId">User ID</label>
+      <input type="number" id="userId" name="userId" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="firstName">Имя</label>
+      <input type="text" id="firstName" name="firstName" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Фамилия</label>
+      <input type="text" id="lastName" name="lastName" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="dateOfBirth">Дата рождения</label>
+      <input type="date" id="dateOfBirth" name="dateOfBirth" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="gender">Пол</label>
+      <select id="gender" name="gender" class="form-control">
+        <option value="Male">Мужчина</option>
+        <option value="Female">Женщина</option>
+        <option value="Other">Другое европейское чудо</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="bio">Биография</label>
+      <textarea id="bio" name="bio" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="location">Местонахождение</label>
+      <input type="text" id="location" name="location" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Создать профиль</button>
+  </form>
+
+  <!-- Список профилей пользователей -->
+  <h2>User Profiles List</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>User ID</th>
+      <th>Имя</th>
+      <th>Фамилия</th>
+      <th>Дата рождения</th>
+      <th>Пол</th>
+      <th>Биография</th>
+      <th>Местонахождение</th>
+      <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="profile : ${userProfiles}">
+      <td th:text="${profile.id}"></td>
+      <td th:text="${profile.userId}"></td>
+      <td th:text="${profile.firstName}"></td>
+      <td th:text="${profile.lastName}"></td>
+      <td th:text="${profile.dateOfBirth}"></td>
+      <td th:text="${profile.gender}"></td>
+      <td th:text="${profile.bio}"></td>
+      <td th:text="${profile.location}"></td>
+      <td>
+        <a th:href="@{/profiles/{id}(id=${profile.id})}" class="btn btn-info">Редактировать</a>
+        <form th:action="@{/profiles/{id}(id=${profile.id})}" method="post" style="display:inline;">
+          <input type="hidden" name="_method" value="delete"/>
+          <button type="submit" class="btn btn-danger">Удалить</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
