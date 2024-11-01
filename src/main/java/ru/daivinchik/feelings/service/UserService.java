@@ -1,3 +1,4 @@
+// UserService.java
 package ru.daivinchik.feelings.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,36 +17,35 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = new BCryptPasswordEncoder(); // Инициализация BCryptPasswordEncoder
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
-    public User createUser(User user) {
-        // Шифрование пароля перед сохранением
+    public void saveUser(User user) {
+        // Хешируем пароль перед сохранением
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        return userRepository.save(user);
+        userRepository.save(user);
     }
-    //Приходить и возвращаться UserDTO
 
-    public User updateUser(Long id, User updatedUser) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
+    public void updateUser(Long id, User updatedUser) {
+        Optional<User> existingUser = userRepository.findById(id);
+        if (existingUser.isPresent()) {
+            User user = existingUser.get();
             user.setUsername(updatedUser.getUsername());
             user.setEmail(updatedUser.getEmail());
-            user.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
-            return userRepository.save(user);
-        } else {
-            throw new RuntimeException("User not found");
+            if (!updatedUser.getPasswordHash().isEmpty()) {
+                user.setPasswordHash(passwordEncoder.encode(updatedUser.getPasswordHash()));
+            }
+            userRepository.save(user);
         }
     }
 

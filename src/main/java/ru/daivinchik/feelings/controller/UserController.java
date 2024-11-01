@@ -1,66 +1,63 @@
+// UserController.java
 package ru.daivinchik.feelings.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.daivinchik.feelings.converter.UserConverter;
-import ru.daivinchik.feelings.dto.UserDto;
 import ru.daivinchik.feelings.entity.User;
 import ru.daivinchik.feelings.service.UserService;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-@RestController
-@RequestMapping("/api/users")
+@Controller
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final UserConverter userConverter;
 
     @Autowired
-    public UserController(UserService userService, UserConverter userConverter) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userConverter = userConverter;
     }
 
+    // Получение всех пользователей
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        List<UserDto> userDtos = users.stream()
-                .map(userConverter::convertToDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(userDtos);
+    public String getAllUsers(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "users";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .map(userConverter::convertToDto)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    // Страница добавления нового пользователя
+    @GetMapping("/new")
+    public String showAddUserForm(Model model) {
+        model.addAttribute("user", new User());
+        return "user_form";
     }
 
-    @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        User user = userConverter.convertToEntity(userDto);
-        User createdUser = userService.createUser(user);
-        UserDto createdUserDto = userConverter.convertToDto(createdUser);
-        return new ResponseEntity<>(createdUserDto, HttpStatus.CREATED);
+    // Сохранение нового пользователя
+    @PostMapping("/save")
+    public String saveUser(@ModelAttribute("user") User user) {
+        userService.saveUser(user);
+        return "redirect:/users";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
-        User user = userConverter.convertToEntity(userDto);
-        User updatedUser = userService.updateUser(id, user);
-        UserDto updatedUserDto = userConverter.convertToDto(updatedUser);
-        return ResponseEntity.ok(updatedUserDto);
+    // Страница редактирования пользователя
+    @GetMapping("/edit/{id}")
+    public String showEditUserForm(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("user", userService.getUserById(id));
+        return "user_form";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    // Обновление пользователя
+    @PostMapping("/update/{id}")
+    public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") User user) {
+        userService.updateUser(id, user);
+        return "redirect:/users";
+    }
+
+    // Удаление пользователя
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        return "redirect:/users";
     }
 }
