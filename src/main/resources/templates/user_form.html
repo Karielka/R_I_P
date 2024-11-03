@@ -4,25 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Форма пользователя</title>
+    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="/styles/user_form.css"> <!-- Подключение стилей -->
 </head>
 <body>
-<h1 th:text="${#strings.isEmpty(user.id) ? 'Добавить пользователя' : 'Редактировать пользователя'}">Форма пользователя</h1>
+<div class="main-container">
+  <div class="header-container">
+    <h1 th:text="${#strings.isEmpty(user.id) ? 'Добавить пользователя' : 'Редактировать пользователя'}">Форма пользователя</h1>
 
-<form th:action="@{/users/save}" th:object="${user}" method="post">
-    <input type="hidden" th:field="*{id}" />
+  </div>
+  <form th:action="@{/users/save}" th:object="${user}" method="post">
+      <input type="hidden" th:field="*{id}" />
 
-    <label>Имя пользователя:</label>
-    <input type="text" th:field="*{username}" required/>
+      <label>Имя пользователя:</label>
+      <input type="text" th:field="*{username}" required/>
 
-    <label>Email:</label>
-    <input type="email" th:field="*{email}" required/>
+      <label>Email:</label>
+      <input type="email" th:field="*{email}" required/>
 
-    <!-- Поле для пароля: видимое при редактировании, но не обязательное -->
-    <label>Пароль:</label>
-    <input type="password" th:field="*{passwordHash}"
-           th:placeholder="${user.id != null ? 'Оставьте пустым, если не хотите изменять пароль' : ''}"/>
+      <!-- Поле для пароля: видимое при редактировании, но не обязательное -->
+      <label>Пароль:</label>
+      <input type="password" th:field="*{passwordHash}"
+             th:placeholder="${user.id != null ? 'Оставьте пустым, если не хотите изменять пароль' : ''}"/>
 
-    <button type="submit" th:text="${#strings.isEmpty(user.id) ? 'Добавить' : 'Сохранить'}">Сохранить</button>
-</form>
+      <button type="submit" th:text="${#strings.isEmpty(user.id) ? 'Добавить' : 'Сохранить'}">Сохранить</button>
+  </form>
+</div>
 </body>
 </html>
