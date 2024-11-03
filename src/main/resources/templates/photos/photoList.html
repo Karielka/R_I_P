@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Photos</title>
+</head>
+<body>
+<h2>Photos for Profile ID: ${userProfileId}</h2>
+<div>
+  <a href="/profiles/${userProfileId}/photos/add">Add Photo</a>
+</div>
+<ul>
+  <th:block th:each="photo : ${photos}">
+    <li>
+      <img th:src="'data:image/jpeg;base64,' + ${T(org.apache.tomcat.util.codec.binary.Base64).encodeBase64String(photo.photoData)}" alt="Photo" width="150"/>
+      <span th:text="${photo.primary ? 'Primary' : 'Secondary'}"></span>
+      <a th:href="@{/profiles/{userProfileId}/photos/delete/{photoId}(userProfileId=${userProfileId}, photoId=${photo.id})}">Delete</a>
+    </li>
+  </th:block>
+</ul>
+</body>
+</html>
