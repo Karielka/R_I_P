@@ -1,22 +1,13 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: "Trebuchet MS", sans-serif;
+    background-color: #1c1c1c;
     margin: 0;
     padding: 20px;
 }
 
 h1 {
-    color: #333;
-}
-
-a {
-    text-decoration: none;
     color: #007BFF;
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 table {
@@ -39,15 +30,7 @@ th {
     color: white;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-tr:hover {
-    background-color: #ddd;
-}
-
-button {
+button-add {
     background-color: #007BFF;
     color: white;
     border: none;
